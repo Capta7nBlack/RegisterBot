@@ -1,0 +1,9 @@
+# THe place for courses to be written
+
+# The template is 
+# COURSE COURSE_NUMBER: "Lecture_number"L, "Lab_number"Lb, "Recitation_number"R, Seminar_number"S
+
+ENG 200: 2Lb, 5L
+WCS 150: 9L
+PHYS 161: 2L, 6PLb, 2R
+MATH 161: 1L, 5R
