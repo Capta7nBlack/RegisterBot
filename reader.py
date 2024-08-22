@@ -20,6 +20,7 @@ def digit_string(string):
     for char in string:
         if char.isdigit():
             new = new + char
+    print(new)
     return new
 
 
@@ -40,7 +41,9 @@ def file_reader(schedule):
             section = sections.split(",")
             
             for item in section:
+                print(item)
                 item = item.strip()
+                print(item)
             if len(section) == 3:
                 lecture = digit_string(section[0])
                 lab_section = digit_string(section[1])
@@ -55,11 +58,15 @@ def file_reader(schedule):
 
                     lecture = find_element_before_key(section[idx], "L")
                     if lecture:
+                        print("in file_reader where lecture = find_element_before_key")
+                        print(lecture)
                         break
                 for idx, _ in enumerate(section):
 
                     lab_section = (find_element_before_key(section[idx], "Lb"))
                     if lab_section:
+                        print("in file_reader where lecture = find_element_before_key")
+                        print(lab_section)
                         break
                 for idx, _ in enumerate(section):
 
@@ -74,18 +81,21 @@ def file_reader(schedule):
             
                 
                 if lab_section:
+                    lecture = digit_string(lecture)
                     lab_section = digit_string(lab_section)
                     courses[course_name] = {
                         'lecture' : f'{lecture}',
                         'lab_section' : f'{lab_section}'
                     }
                 elif recitation:
+                    lecture = digit_string(lecture)
                     recitation = digit_string(recitation)
                     courses[course_name] = {
                     'lecture' : f'{lecture}',
                     'recitation' : f'{recitation}'
                     }
                 elif seminar:
+                    lecture = digit_string(lecture)
                     seminar = digit_string(seminar)
                     courses[course_name] = {
                         'lecture' : f'{lecture}',
@@ -126,7 +136,11 @@ def dict_reader_lab(dict, course):
     for idx, inside_key in enumerate(inside_keys):
          
         if inside_keys[idx] == 'lab_section':
+            
+            
             sections.append(f'Section {values[idx]}')
+            print(inside_keys[idx])
+            print(sections[0])
             return sections[0]
     else:
         return None
@@ -145,6 +159,8 @@ def dict_reader_lecture(dict, course):
          
         if inside_keys[idx] == 'lecture':
             sections.append(f'Section {values[idx]}')
+            print(inside_keys[idx])
+            print(sections[0])
             return sections[0]
     else:
         return None

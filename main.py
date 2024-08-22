@@ -19,6 +19,7 @@ password = ""
 
 
 courses = file_reader("schedule.txt")
+print(courses)
 
 
 
@@ -110,7 +111,7 @@ try:
 
         schedule = False
         try:
-            search = WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.ID, "")))
+            search = WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.ID, "titleText-inputEl")))
             search.send_keys(course)
             
             print(f"Wrote course name into search: {course}")
@@ -118,7 +119,7 @@ try:
             print("Could not write course name into search")
             
         try:
-            enter = WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.ID, "")))
+            enter = WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.ID, "show_courses_button-btnIconEl")))
             enter.click()
             print("Pressed enter")
         except:
@@ -126,13 +127,13 @@ try:
         
         try:
             print(f"Checking whether the course - {course} - is accessible")
-            open = WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.XPATH, "")))
+            open = WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.XPATH, "//*[text()='OPEN']")))
             open.click()
             schedule = True
             print(f"The course - {course} - is accessible")    
             open.click()
             try:
-                add = WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.XPATH, f"")))
+                add = WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.XPATH, f"//a[@class='green-button'  and contains(text(), 'Add to Selected Courses')] ")))
                 add.click()
                 print(f"Added course - {course} - to the schedule table")
             except:
@@ -143,7 +144,7 @@ try:
             
         try: 
             if not schedule:
-                selected = WebDriverWait(driver, 0.1).until(EC.presence_of_element_located((By.XPATH, "")))
+                selected = WebDriverWait(driver, 0.1).until(EC.presence_of_element_located((By.XPATH, "//*[text()='SELECTED COURSE']")))
                 schedule = True
                 print(f"The course - {course} - was skipped due it not having the priority to register")
                 
@@ -152,7 +153,7 @@ try:
       
         try: 
             if not schedule:
-                priority = WebDriverWait(driver, 0.1).until(EC.presence_of_element_located((By.XPATH, "")))
+                priority = WebDriverWait(driver, 0.1).until(EC.presence_of_element_located((By.XPATH, "//*[text()='You are not in the current priority. Please check the priority requirements.']")))
                 schedule = True
                 print(f"The course - {course} - was skipped due it not having the priority to register")
                 continue
@@ -161,7 +162,7 @@ try:
 
         try:
             if not schedule:
-                registered = WebDriverWait(driver, 0.1).until(EC.presence_of_element_located((By.XPATH, "")))
+                registered = WebDriverWait(driver, 0.1).until(EC.presence_of_element_located((By.XPATH, "//*[contains(text(), \"Instructor's Permission Required. Registration through Add Course form only!\")]")))
                 print(f"The course - {course} - was skipped due it not having the instruction's persimission to register")
                 continue
         except:
@@ -169,7 +170,7 @@ try:
 
         try:
             if not schedule:
-                instruction_permission = WebDriverWait(driver, 0.1).until(EC.presence_of_element_located((By.XPATH, "")))
+                instruction_permission = WebDriverWait(driver, 0.1).until(EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'COURSE REGISTERED')]")))
                 print(f"The course - {course} - was skipped because it is already registered")
                 continue
         except:
@@ -180,15 +181,17 @@ try:
 
         
         driver.get("https://registrar.nu.edu.kz/my-registrar/course-registration/selected")
-        time.sleep(0.2)
+        time.sleep(1)
     
         lecture_section = dict_reader_lecture(courses, course)
         lab_section = dict_reader_lab(courses, course)
         recitation_section = dict_reader_recitation(courses, course)
         seminar_section = dict_reader_seminar(courses, course)
+        print(lecture_section)
+
         try:
-            WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, f"")))
-            driver.find_element(By.XPATH, f"text, '{course.upper()}')]").click()
+            WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, f"course-cloud")))
+            driver.find_element(By.XPATH, f"//span[contains(text(), '{course.upper()}')]").click()
 
             print(f"Pressed the course - {course} in the schedule table")
         except:
@@ -199,7 +202,8 @@ try:
         if lecture_section:
             try:
                 print(f"Trying to find section for course - {course}")
-                WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.XPATH, f""))).click()
+                print(lecture_section)
+                WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.XPATH, f"//input[@value='{lecture_section}' and contains(@name, 'Lecture')]"))).click()
                 print(f"Clicked on {lecture_section} for course - {course}")
             except:
                 print(f"Could not find the {lecture_section} for {course}")
@@ -209,7 +213,8 @@ try:
         if lab_section:
             try:
                 print(f"Trying to find section for course - {course}")
-                WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.XPATH, f""))).click()
+                print(lab_section)
+                WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.XPATH, f"//input[@value='{lab_section}' and contains(@name, 'Lab')]"))).click()
                 print(f"Clicked on {lab_section} for course - {course}")
             except:
                 print(f"Could not find the {lab_section} for {course}")
@@ -220,7 +225,7 @@ try:
             
             try:
                 print(f"Trying to find section for course - {course}")
-                WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.XPATH, f""))).click()
+                WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.XPATH, f"//input[@value='{recitation_section}' and contains(@name, 'Recitation')]"))).click()
                 print(f"Clicked on {recitation_section} for course - {course}")
             except:
                 print(f"Could not find the {recitation_section} for {course}")
@@ -232,7 +237,7 @@ try:
             
             try:
                 print(f"Trying to find section for course - {course}")
-                WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.XPATH, f""))).click()
+                WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.XPATH, f"//input[@value='{seminar_section}' and contains(@name, 'Seminar')]"))).click()
                 print(f"Clicked on {seminar_section} for course - {course}")
             except:
                 print(f"Could not find the {seminar_section} for {course}")
@@ -240,7 +245,7 @@ try:
 
 
         try:
-            WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.XPATH, f""))).click()
+            WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.XPATH, f"//a[@class='green-button'  and contains(text(), 'Register')] "))).click()
             print(f"The course {course} has been registered successfuly")
         except:
             print(f"The register button was not found for {course}")
@@ -248,14 +253,14 @@ try:
 
         # WAITLIST ACCEPTANCE HANDLING
         try:
-            WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.ID, ""))).click()
+            WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.ID, "button-1006-btnIconEl"))).click()
             print("Accepted Waitlist")
         except:
             pass
 
 
         try:
-            WebDriverWait(driver, 1).until(EC.element_to_be_clickable((By.ID, ""))).click()
+            WebDriverWait(driver, 1).until(EC.element_to_be_clickable((By.ID, "button-1005-btnIconEl"))).click()
             print("The register button was closed")
         except:
             print("Could not close register button")
