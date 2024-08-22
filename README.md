@@ -8,5 +8,7 @@ Setup instruction
 3. Go to crashed.nu and create the schedule you want.
 4. After creating the schedule, press three dots and export it as .txt file.
 5. Put the exported "schedule.txt" file into "RegisterBot" folder.
-6. run in cmd "python main.py" or run the main.py using other means such as VS code runner.
-7. Enjoy the show:)
+6. Create virtual environment. Optional
+7. in terminal, use "pip install -r requirements.txt"
+8. Run the main.py using terminal "python main.py" or other means like VSCode runner.
+9. Enjoy the show:)
